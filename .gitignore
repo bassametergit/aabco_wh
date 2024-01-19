@@ -1,0 +1,284 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# JetBrains
+.idea
+
+
+.DS_Store
+
+langchain.readthedocs.io/
+venv/pyvenv.cfg
+venv/Include/site/python3.11/greenlet/greenlet.h
+venv/Scripts/activate
+venv/Scripts/activate.bat
+venv/Scripts/Activate.ps1
+venv/Scripts/black.exe
+venv/Scripts/blackd.exe
+venv/Scripts/cmark.exe
+venv/Scripts/convert-caffe2-to-onnx.exe
+venv/Scripts/convert-onnx-to-caffe2.exe
+venv/Scripts/cygdb.exe
+venv/Scripts/cython.exe
+venv/Scripts/cythonize.exe
+venv/Scripts/deactivate.bat
+venv/Scripts/dotenv.exe
+venv/Scripts/dumppdf.py
+venv/Scripts/email_validator.exe
+venv/Scripts/f2py.exe
+venv/Scripts/fonttools.exe
+venv/Scripts/google-oauthlib-tool.exe
+venv/Scripts/httpx.exe
+venv/Scripts/huggingface-cli.exe
+venv/Scripts/ipython.exe
+venv/Scripts/ipython3.exe
+venv/Scripts/isort-identify-imports.exe
+venv/Scripts/isort.exe
+venv/Scripts/isympy.exe
+venv/Scripts/jupyter-kernel.exe
+venv/Scripts/jupyter-kernelspec.exe
+venv/Scripts/jupyter-migrate.exe
+venv/Scripts/jupyter-run.exe
+venv/Scripts/jupyter-troubleshoot.exe
+venv/Scripts/jupyter.exe
+venv/Scripts/langchain-server.exe
+venv/Scripts/mammoth.exe
+venv/Scripts/markdown_py.exe
+venv/Scripts/msg_parser.exe
+venv/Scripts/nltk.exe
+venv/Scripts/normalizer.exe
+venv/Scripts/openai.exe
+venv/Scripts/pdf2txt.py
+venv/Scripts/pdfplumber.exe
+venv/Scripts/pinecone.exe
+venv/Scripts/pip.exe
+venv/Scripts/pip3.11.exe
+venv/Scripts/pip3.exe
+venv/Scripts/pipreqs.exe
+venv/Scripts/publish.py
+venv/Scripts/pyftmerge.exe
+venv/Scripts/pyftsubset.exe
+venv/Scripts/pygmentize.exe
+venv/Scripts/pygrun
+venv/Scripts/pyrsa-decrypt.exe
+venv/Scripts/pyrsa-encrypt.exe
+venv/Scripts/pyrsa-keygen.exe
+venv/Scripts/pyrsa-priv2pub.exe
+venv/Scripts/pyrsa-sign.exe
+venv/Scripts/pyrsa-verify.exe
+venv/Scripts/pytesseract.exe
+venv/Scripts/python.exe
+venv/Scripts/pythonw.exe
+venv/Scripts/pytube.exe
+venv/Scripts/pywin32_postinstall.py
+venv/Scripts/pywin32_testall.py
+venv/Scripts/tabulate.exe
+venv/Scripts/tensorboard.exe
+venv/Scripts/torchrun.exe
+venv/Scripts/tqdm.exe
+venv/Scripts/ttx.exe
+venv/Scripts/unstructured-ingest.exe
+venv/Scripts/uvicorn.exe
+venv/Scripts/vba_extract.py
+venv/Scripts/wheel.exe
+venv/Scripts/youtube_transcript_api.exe
+venv/share/doc/networkx-3.1/LICENSE.txt
+venv/share/doc/networkx-3.1/examples/README.txt
+venv/share/doc/networkx-3.1/examples/3d_drawing/mayavi2_spring.py
+venv/share/doc/networkx-3.1/examples/3d_drawing/plot_basic.py
+venv/share/doc/networkx-3.1/examples/3d_drawing/README.txt
+venv/share/doc/networkx-3.1/examples/algorithms/hartford_drug.edgelist
+venv/share/doc/networkx-3.1/examples/algorithms/plot_beam_search.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_betweenness_centrality.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_blockmodel.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_circuits.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_davis_club.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_dedensification.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_girvan_newman.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_iterated_dynamical_systems.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_krackhardt_centrality.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_maximum_independent_set.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_parallel_betweenness.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_rcm.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_snap.py
+venv/share/doc/networkx-3.1/examples/algorithms/plot_subgraphs.py
+venv/share/doc/networkx-3.1/examples/algorithms/README.txt
+venv/share/doc/networkx-3.1/examples/algorithms/WormNet.v3.benchmark.txt
+venv/share/doc/networkx-3.1/examples/basic/plot_properties.py
+venv/share/doc/networkx-3.1/examples/basic/plot_read_write.py
+venv/share/doc/networkx-3.1/examples/basic/plot_simple_graph.py
+venv/share/doc/networkx-3.1/examples/basic/README.txt
+venv/share/doc/networkx-3.1/examples/drawing/chess_masters_WCC.pgn.bz2
+venv/share/doc/networkx-3.1/examples/drawing/knuth_miles.txt.gz
+venv/share/doc/networkx-3.1/examples/drawing/plot_center_node.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_chess_masters.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_custom_node_icons.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_degree.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_directed.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_edge_colormap.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_ego_graph.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_eigenvalues.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_four_grids.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_house_with_colors.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_knuth_miles.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_labels_and_colors.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_multipartite_graph.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_node_colormap.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_rainbow_coloring.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_random_geometric_graph.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_sampson.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_selfloops.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_simple_path.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_spectral_grid.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_tsp.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_unix_email.py
+venv/share/doc/networkx-3.1/examples/drawing/plot_weighted_graph.py
+venv/share/doc/networkx-3.1/examples/drawing/README.txt
+venv/share/doc/networkx-3.1/examples/drawing/unix_email.mbox
+venv/share/doc/networkx-3.1/examples/graph/plot_dag_layout.py
+venv/share/doc/networkx-3.1/examples/graph/plot_degree_sequence.py
+venv/share/doc/networkx-3.1/examples/graph/plot_erdos_renyi.py
+venv/share/doc/networkx-3.1/examples/graph/plot_expected_degree_sequence.py
+venv/share/doc/networkx-3.1/examples/graph/plot_football.py
+venv/share/doc/networkx-3.1/examples/graph/plot_karate_club.py
+venv/share/doc/networkx-3.1/examples/graph/plot_morse_trie.py
+venv/share/doc/networkx-3.1/examples/graph/plot_mst.py
+venv/share/doc/networkx-3.1/examples/graph/plot_napoleon_russian_campaign.py
+venv/share/doc/networkx-3.1/examples/graph/plot_roget.py
+venv/share/doc/networkx-3.1/examples/graph/plot_triad_types.py
+venv/share/doc/networkx-3.1/examples/graph/plot_words.py
+venv/share/doc/networkx-3.1/examples/graph/README.txt
+venv/share/doc/networkx-3.1/examples/graph/roget_dat.txt.gz
+venv/share/doc/networkx-3.1/examples/graph/words_dat.txt.gz
+venv/share/doc/networkx-3.1/examples/subclass/plot_antigraph.py
+venv/share/doc/networkx-3.1/examples/subclass/plot_printgraph.py
+venv/share/doc/networkx-3.1/examples/subclass/README.txt
+venv/share/man/man1/isympy.1
+venv/share/man/man1/ttx.1
