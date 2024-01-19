@@ -46,7 +46,7 @@ permissions:
 jobs:
   deploy:
     name: Deploy
-    runs-on: Linux/X86_64
+    runs-on: Ubuntu:latest
     environment: production
 
     steps:
