@@ -25,7 +25,7 @@
 #    and best practices on handling the access key credentials.
 #
 
-name: Deploy4 to Amazon ECS
+name: Deploy5 to Amazon ECS
 
 on:
   push:
