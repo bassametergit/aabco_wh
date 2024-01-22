@@ -402,3 +402,11 @@ def question(sessionId:str, q: str, _user=Depends(authorize_user)):
                                             os.environ.get('PINECONE_API_KEY'),os.environ.get('PINECONE_ENVIRONMENT')))
     thread.start()
     return {"answer":answer}
+
+@router.get("/test", status_code=201, description="test connect")
+def test():
+    
+
+    return { 
+            "result":1,
+    }
