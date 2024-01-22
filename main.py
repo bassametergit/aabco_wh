@@ -62,6 +62,6 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(
-        app, host="0.0.0.0",
+        app, host="13.60.18.148",
         port=8000,
     )
