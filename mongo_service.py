@@ -9,3 +9,4 @@ def get_collection(db_name: str, collection_name):
         mongo_client = MongoClient(os.environ.get('DB_CONNECTION_STRING'))
     return mongo_client[db_name][collection_name]
 
+
