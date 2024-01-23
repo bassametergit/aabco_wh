@@ -137,7 +137,7 @@ pytz==2023.3
 PyYAML==6.0
 pyzmq==25.1.0
 regex==2023.5.5
-requests==2.25.1
+requests
 rfc3339-validator==0.1.4
 rfc3986==1.5.0
 rfc3986-validator==0.1.1
@@ -164,7 +164,7 @@ typing-inspect==0.8.0
 typing_extensions==4.5.0
 tzdata==2023.3
 unstructured==0.6.4
-urllib3==2.0.2
+urllib3
 uvicorn==0.22.0
 wcwidth==0.2.6
 webencodings==0.5.1
