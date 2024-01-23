@@ -91,7 +91,7 @@ notebook_shim==0.2.3
 numexpr==2.8.4
 numpy==1.23.5
 olefile==0.46
-openai==0.27.6
+openai
 openapi-schema-pydantic==1.2.4
 openpyxl==3.1.2
 overrides==7.3.1
@@ -105,7 +105,7 @@ pdfminer==20191125
 pdfminer.six==20221105
 pickleshare==0.7.5
 Pillow==9.5.0
-pinecone-client==2.2.1
+pinecone-client
 platformdirs==3.5.0
 prometheus-client==0.17.0
 prompt-toolkit==3.0.38
@@ -154,7 +154,7 @@ sympy==1.11.1
 tabula-py==2.7.0
 tenacity==8.2.2
 terminado==0.17.1
-tiktoken==0.4.0
+tiktoken
 tinycss2==1.2.1
 tomli==2.0.1
 tornado==6.3.2
