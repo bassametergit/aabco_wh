@@ -39,7 +39,8 @@ class Data_Access:
     @staticmethod
     def GetUserByFrontendId(userfrontendid: str) -> UserDb:
         client_collection = get_collection(db_name, 'user')
-        return client_collection.find_one({'userfrontendid': userfrontendid})
+        #return client_collection.find_one({'userfrontendid': userfrontendid})
+        return client_collection.find_one({})
         
     @staticmethod
     def CreateNamespaceDb(ns: NamespaceDb): # returns namespace id
