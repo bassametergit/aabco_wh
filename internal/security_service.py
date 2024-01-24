@@ -1,5 +1,7 @@
 from jose import jwt
 from passlib.context import CryptContext
+import json
+import os
 PRIVATE_KEY = open("PrivateKey.txt").read()
 PUBLIC_KEY = open("PublicKey.txt").read()
 
@@ -24,3 +26,11 @@ def create_access_token(data: dict, private_key=PRIVATE_KEY, algorithm=ALGORITHM
     to_encode = data.copy()
     encoded_jwt = jwt.encode(to_encode, private_key, algorithm=algorithm)
     return encoded_jwt
+
+def get_openai_key():
+    if os.environ.get('ENV')=='local':
+        return os.environ.get('OPENAI_API_KEY')
+    else:
+        with open('config.json') as f:
+            config = json.load(f)
+            return config.get('openai_secret_key')
