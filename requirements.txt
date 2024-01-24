@@ -154,7 +154,7 @@ sympy==1.11.1
 tabula-py==2.7.0
 tenacity==8.2.2
 terminado==0.17.1
-tiktoken==0.4.0
+tiktoken
 tinycss2==1.2.1
 tomli==2.0.1
 tornado==6.3.2
