@@ -278,8 +278,8 @@ def ingest_urls_and_text_to_pinecone(urls:List[str],chunkSize, chunkOverlap, ind
             api_key=pineconekey,  # find at app.pinecone.io
             environment=pineconeenv,  
             namespace=nsname)
-    if (delete_ns_if_exists):
-        pinecone.Index(index_name=ind_name).delete(delete_all=True, namespace=nsname)
+    # if (delete_ns_if_exists):
+    #     pinecone.Index(index_name=ind_name).delete(delete_all=True, namespace=nsname)
     return Pinecone.from_documents(documents, embeddings, index_name=ind_name, namespace=nsname)
 
 def add_doc_to_pinecone(filename:str, chunkSize, chunkOverlap, ind_name, nsname, openaikey, pineconekey,pineconeenv):
