@@ -19,7 +19,7 @@ def create_app() -> FastAPI:
         )
     ]
     app = FastAPI(
-        title="Aabco Chatbot Jenny- Work History API",
+        title="Aabco Chatbot Jenny API",
         description="An API for Aabco.",
         openapi_url="/swagger.json",
         middleware=middleware)
