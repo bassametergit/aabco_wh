@@ -27,10 +27,10 @@ def create_access_token(data: dict, private_key=PRIVATE_KEY, algorithm=ALGORITHM
     encoded_jwt = jwt.encode(to_encode, private_key, algorithm=algorithm)
     return encoded_jwt
 
-def get_openai_key():
+def get_openai_and_pinecone_keys():
     if os.environ.get('ENV')=='local':
-        return os.environ.get('OPENAI_API_KEY')
+        return os.environ.get('OPENAI_API_KEY'), os.environ.get('PINECONE_API_KEY')
     else:
         with open('config.json') as f:
             config = json.load(f)
-            return config.get('openai_secret_key')
+            return config.get('openai_secret_key'), config.get('pinecone_secret_key')
