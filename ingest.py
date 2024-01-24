@@ -271,6 +271,8 @@ def ingest_urls_and_text_to_pinecone(urls:List[str],chunkSize, chunkOverlap, ind
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunkSize, chunk_overlap=chunkOverlap,)
     documents = text_splitter.split_documents(documents)        
     embeddings = OpenAIEmbeddings(openai_api_key=openaikey)
+    print("in function ingest")
+    print(ind_name)
     # initialize pinecone
     pinecone.init(
             api_key=pineconekey,  # find at app.pinecone.io
