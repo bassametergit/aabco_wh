@@ -392,9 +392,9 @@ def question(sessionId:str, q: str, _user=Depends(authorize_user)):
         m="Inexistent Namespace of Id "+session['namespaceid']+". Maybe deleted after creation of this session creation." 
         raise HTTPException(status_code=404, detail=m)
     chath = [tuple(l) for l in session['chathistory']]
-    openai_key, pinecone_key=get_openai_and_pinecone_keys()
+    openai_key, pinecone_key, pinecone_env=get_openai_and_pinecone_keys()
     answer, updated_chat_history=answer_one_session_question(query=q,pineconekey=pinecone_key,openaik=openai_key,
-                                                             indexname=ns['indexname'],pineconeenv=os.environ.get('PINECONE_ENVIRONMENT'),
+                                                             indexname=ns['indexname'],pineconeenv=pinecone_env,
                                                              pineconenamespace=ns['pineconeName'],
                                                              model="gpt-4-0314",questionAnsweringTemperature=0.9,maxTokens=3000,similarSourceDocuments=3,
                                                              chat_history=chath)
@@ -402,10 +402,9 @@ def question(sessionId:str, q: str, _user=Depends(authorize_user)):
     
     # add question and answer to Pinecone namespace
     text_to_ingest = "user question ("+str(datetime.now())+"): " + q +"\n" + "your answer (GPT): " + answer
-    openai_key, pinecone_key=get_openai_and_pinecone_keys()
     thread = threading.Thread(target=add_string_to_pinecone, args=(text_to_ingest,300, 30, ns['indexname'],
                                             ns['pineconeName'], openai_key,
-                                            pinecone_key,os.environ.get('PINECONE_ENVIRONMENT')))
+                                            pinecone_key,pinecone_env))
     thread.start()
     return {"answer":answer}
 
