@@ -208,12 +208,12 @@ Response:
     newId=Data_Access.CreateNamespaceDb(NamespaceDb(indexname=ns.indexName,
                                         nsname=ns.nsName, 
                                         nsdescription=ns.description, pineconeName=ns.nsName+"_"+_user['userfrontendid'], creationDate=datetime.now())) 
-    openai_key, pinecone_key=get_openai_and_pinecone_keys()
+    openai_key, pinecone_key, pinecone_env=get_openai_and_pinecone_keys()
     print("in api new_namespace")
     print(ns.indexName)
     ingest_urls_and_text_to_pinecone(urls=ns.docs, chunkSize=300, chunkOverlap=30, ind_name=ns.indexName,
                                             nsname=ns.nsName+"_"+_user['userfrontendid'], delete_ns_if_exists=True, openaikey=openai_key,
-                                            pineconekey=pinecone_key,pineconeenv=os.environ.get('PINECONE_ENVIRONMENT'),text=ns.text)    
+                                            pineconekey=pinecone_key,pineconeenv=pinecone_env,text=ns.text)    
     return JSONResponse(content={
         "datafolder_id": newId
     })
@@ -267,10 +267,10 @@ Response:
     if (ns.docs!=None) and (len(ns.docs)!=0):
         verify_filenames_before_ingestion(docs=ns.docs) #will generate exception if any filename or url isn't valid or is unsupported format to ingest
     delete=(ns.action=="replace")
-    openai_key, pinecone_key=get_openai_and_pinecone_keys()
+    openai_key, pinecone_key, pinecone_env=get_openai_and_pinecone_keys()
     ingest_urls_and_text_to_pinecone(urls=ns.docs, chunkSize=300, chunkOverlap=30, ind_name=nsdb['indexname'],
                                             nsname=nsdb['nsname']+"_"+_user['userfrontendid'], delete_ns_if_exists= delete, openaikey=openai_key,
-                                            pineconekey=pinecone_key,pineconeenv=os.environ.get('PINECONE_ENVIRONMENT'), text=ns.text)
+                                            pineconekey=pinecone_key,pineconeenv=pinecone_env, text=ns.text)
     return JSONResponse(content={
         "nsid": ns.nsId
     })
