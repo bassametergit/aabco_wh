@@ -209,8 +209,6 @@ Response:
                                         nsname=ns.nsName, 
                                         nsdescription=ns.description, pineconeName=ns.nsName+"_"+_user['userfrontendid'], creationDate=datetime.now())) 
     openai_key, pinecone_key, pinecone_env=get_openai_and_pinecone_keys()
-    print("in api new_namespace")
-    print(ns.indexName)
     ingest_urls_and_text_to_pinecone(urls=ns.docs, chunkSize=300, chunkOverlap=30, ind_name=ns.indexName,
                                             nsname=ns.nsName+"_"+_user['userfrontendid'], delete_ns_if_exists=True, openaikey=openai_key,
                                             pineconekey=pinecone_key,pineconeenv=pinecone_env,text=ns.text)    

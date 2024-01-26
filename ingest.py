@@ -34,6 +34,8 @@ from pathlib import Path
 from langchain.vectorstores import Pinecone
 import pinecone
 from typing import List
+import assemblyai as aai
+
 
 
 
@@ -260,6 +262,8 @@ def ingest_urls_and_text_to_pinecone(urls:List[str],chunkSize, chunkOverlap, ind
             raw_documents=html_to_rawdocs(filename)
         elif extension=='.txt'or filename[-3:].lower()=="txt":
             raw_documents=txt_to_rawdocs(filename)
+        elif extension=='.mp3'or filename[-3:].lower()=="mp3":
+            raw_documents=mp3_to_rawdocs(filename)
         elif is_youtube_video(filename):
             raw_documents=youtube_to_rawdocs(filename)
         else:
@@ -271,15 +275,13 @@ def ingest_urls_and_text_to_pinecone(urls:List[str],chunkSize, chunkOverlap, ind
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunkSize, chunk_overlap=chunkOverlap,)
     documents = text_splitter.split_documents(documents)        
     embeddings = OpenAIEmbeddings(openai_api_key=openaikey)
-    print("in function ingest")
-    print(ind_name)
     # initialize pinecone
     pinecone.init(
             api_key=pineconekey,  # find at app.pinecone.io
             environment=pineconeenv,  
             namespace=nsname)
-    # if (delete_ns_if_exists):
-    #     pinecone.Index(index_name=ind_name).delete(delete_all=True, namespace=nsname)
+    if (delete_ns_if_exists):
+        pinecone.Index(index_name=ind_name).delete(delete_all=True, namespace=nsname)
     return Pinecone.from_documents(documents, embeddings, index_name=ind_name, namespace=nsname)
 
 def add_doc_to_pinecone(filename:str, chunkSize, chunkOverlap, ind_name, nsname, openaikey, pineconekey,pineconeenv):
@@ -651,7 +653,17 @@ The function returns a list of raw documents, where each document represents a s
     except Exception as e :
         raise HTTPException(status_code=400, detail="Error with Youtube video " +videoUrl+": "+ str(e))   
 
-
+def mp3_to_rawdocs(audioUrl, metadata=None):
+    aai.settings.api_key ="0a1986a0bda24904bbcb538d2c5f60b5"
+    transcriber = aai.Transcriber()
+    transcript = transcriber.transcribe(audioUrl)
+    raw_documents=string_to_rawdocs(transcript.text,None)
+    # loader = AssemblyAIAudioTranscriptLoader(audioUrl,api_key="0a1986a0bda24904bbcb538d2c5f60b5")
+    # raw_docs = loader.load()
+    # if metadata==None:
+    #         metadata={"source": audioUrl}
+    # raw_documents = [Document(page_content=raw_doc.page_content,metadata=raw_doc.metadata) for raw_doc in raw_docs]
+    return raw_documents
 
 def verify_filename_before_ingestion(doc): 
     
@@ -727,6 +739,8 @@ This function does not have a return value. It raises an HTTPException if a docu
         elif extension=='.html' or extension=='.htm' or filename[-4:].lower()=="html" or filename[-3:].lower()=="htm":
             continue
         elif extension=='.txt'or filename[-3:].lower()=="txt":
+            continue
+        elif extension=='.mp3'or filename[-3:].lower()=="mp3":
             continue
         elif is_youtube_video(filename):
                     pass
