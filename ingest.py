@@ -653,7 +653,7 @@ The function returns a list of raw documents, where each document represents a s
     except Exception as e :
         raise HTTPException(status_code=400, detail="Error with Youtube video " +videoUrl+": "+ str(e))   
 
-def mp3_to_rawdocs(audioUrl, metadata=None):
+def audio_to_rawdocs(audioUrl, metadata=None):
     aai.settings.api_key ="0a1986a0bda24904bbcb538d2c5f60b5"
     transcriber = aai.Transcriber()
     transcript = transcriber.transcribe(audioUrl)
@@ -740,7 +740,11 @@ This function does not have a return value. It raises an HTTPException if a docu
             continue
         elif extension=='.txt'or filename[-3:].lower()=="txt":
             continue
-        elif extension=='.mp3'or filename[-3:].lower()=="mp3":
+        elif extension=='.mp3'or filename[-3:].lower()=="mp3" or extension=='.opus' or filename[-4:].lower()=="opus" or extension=='.wav' or filename[-3:].lower()=="wav" \
+            or extension=='.wma' or filename[-3:].lower()=="wma" or extension=='.3ga' or filename[-3:].lower()=="3ga" or extension=='.mov' or filename[-3:].lower()=="mov" \
+                or extension=='.aac' or filename[-3:].lower()=="aac " or extension=='.3ga' or filename[-3:].lower()=="3ga" or extension=='.amr' or filename[-3:].lower()=="amr" \
+                    or extension=='.m4a' or filename[-3:].lower()=="m4a" or extension=='.webm' or filename[-4:].lower()=="webm" or extension=='.mov' or filename[-3:].lower()=="mov" \
+                        or extension=='.mp4' or filename[-3:].lower()=="mp4" or extension=='.m4v' or filename[-3:].lower()=="m4v":
             continue
         elif is_youtube_video(filename):
                     pass
