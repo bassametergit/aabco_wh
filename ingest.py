@@ -263,7 +263,7 @@ def ingest_urls_and_text_to_pinecone(urls:List[str],chunkSize, chunkOverlap, ind
         elif extension=='.txt'or filename[-3:].lower()=="txt":
             raw_documents=txt_to_rawdocs(filename)
         elif extension=='.mp3'or filename[-3:].lower()=="mp3":
-            raw_documents=mp3_to_rawdocs(filename)
+            raw_documents=audio_to_rawdocs(filename)
         elif is_youtube_video(filename):
             raw_documents=youtube_to_rawdocs(filename)
         else:
