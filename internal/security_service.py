@@ -34,3 +34,11 @@ def get_openai_and_pinecone_keys():
         with open('config.json') as f:
             config = json.load(f)
             return config.get('openai_secret_key'), config.get('pinecone_secret_key'), config.get('pinecone_environment')
+        
+def get_connection_string():
+    if os.environ.get('ENV')=='local':
+        return os.environ.get('DB_CONNECTION_STRING')
+    else:
+        with open('config.json') as f:
+            config = json.load(f)
+            return config.get('connection_string')

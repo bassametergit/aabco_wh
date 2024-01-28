@@ -750,3 +750,18 @@ This function does not have a return value. It raises an HTTPException if a docu
                     pass
         else:
             raise HTTPException(status_code=400, detail="File path \'" +filename+"\' is not a valid file or url, or format not yet supported")
+        
+        
+# RUNS ONLY IN DEBUG MODE
+
+# pinecone.init(
+#             api_key=os.environ.get('PINECONE_API_KEY'), 
+#             environment=os.environ.get('PINECONE_ENVIRONMENT'))
+# d=pinecone.Index(index_name="aabco").describe_index_stats()
+# print(d)
+# # Delete each namespace
+# pinecone.init(
+#             api_key='8f498f5d-5985-4aee-a54f-084262cb617d', 
+#             environment='gcp-starter')
+# for n in d['namespaces'].keys():
+#     pinecone.Index(index_name="aabco").delete(delete_all=True, namespace=n)
