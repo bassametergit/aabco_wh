@@ -1,8 +1,6 @@
 import json
 from fastapi import APIRouter, Depends,  HTTPException
-from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-import os
 from apis_models import  SessionForUserSessions, DataFoldersForGetNamespaces,  UserForApi, DataFolderForApi, UpdateDocsOfDataFolderForApi
 from chains_functions import answer_one_session_question
 from ingest import ingest_urls_and_text_to_pinecone, normalize_string, verify_filenames_before_ingestion, add_string_to_pinecone
@@ -20,7 +18,7 @@ import threading
 
 router = APIRouter(prefix="/jenny", tags=["Chatbot Jenny"])
     
-@router.post("/create_user", status_code=201, description="Create a new User")
+@router.post("/create_user", status_code=201,description="Create a new User")
 def create_user(user: UserForApi, _user=Depends(authorize_user)):
     """Creates a new User in Backend Db in table 'User'. If this User already exists (same userFrontendId), it only returns a new JWT for the User
        This Api can be called only with a superadmin JWT
