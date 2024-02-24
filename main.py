@@ -1,12 +1,11 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
-#from Routers.auth import router as auth_router
+# from Routers.auth import router as auth_router
 from Routers.chatbot import router as chatbot_router
 
 from fastapi.openapi.utils import get_openapi
-
 
 def create_app() -> FastAPI:
     middleware = [
@@ -23,7 +22,6 @@ def create_app() -> FastAPI:
         description="An API for Aabco.",
         openapi_url="/swagger.json",
         middleware=middleware)
-    #app.include_router(auth_router)
     app.include_router(chatbot_router)
     return app
 
@@ -54,8 +52,9 @@ def custom_openapi():
 app.openapi = custom_openapi
 
 async def startup_event():
-    print("Go")
+    print("API Jenny Started")
     
+
 app.add_event_handler("startup", startup_event)
     
 if __name__ == "__main__":

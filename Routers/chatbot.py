@@ -6,7 +6,6 @@ from chains_functions import answer_one_session_question
 from ingest import ingest_urls_and_text_to_pinecone, normalize_string, verify_filenames_before_ingestion, add_string_to_pinecone
 from db_models import NamespaceDb, SessionDb, UserDb
 from data_access import Data_Access
-from datetime import datetime
 from fastapi import WebSocket, WebSocketDisconnect
 
 from typing import List
@@ -14,6 +13,8 @@ from dependencies import authorize_user
 from internal.security_service import create_access_token, get_openai_and_pinecone_keys
 import re
 import threading
+import boto3
+from datetime import datetime, timedelta
 
 
 router = APIRouter(prefix="/jenny", tags=["Chatbot Jenny"])
@@ -253,7 +254,7 @@ Response:
     if (_user['role']=="user"):
         raise HTTPException(status_code=403, detail="Forbidden. User cannot update Namespace")
     ns.action=ns.action.lower()
-    if ns.action!="add" and ns.action!="replave":
+    if ns.action!="add" and ns.action!="replace":
         raise HTTPException(status_code=400, detail="action should be add or replace.")
     if not Data_Access.IsValidObjectId(ns.nsId):
         raise HTTPException(status_code=404, detail="Invalid Data Folder Id. Input Data Folder Id provided by Api /new_datafolder")
@@ -403,6 +404,26 @@ def question(sessionId:str, q: str, _user=Depends(authorize_user)):
                                             pinecone_key,pinecone_env))
     thread.start()
     return {"answer":answer}
+
+
+router.delete("/delete_foringestion", status_code=201, description="Deletes all files in foringestion bucket at S3")
+# Deletes all files of bucket "foringestion" on S3 (used to ingest user local files)
+# except files that were created less than 1 hour ago
+# This endpoint runs as a cron job each day at midnight
+def delete_foringestion():
+    s3 = boto3.client("s3", region_name="eu-north-1")
+    # List objects in the bucket
+    objects = s3.list_objects_v2(Bucket="foringestion")
+    # Get current time
+    current_time = datetime.now()
+    # Calculate the timestamp for an hour ago
+    hour_ago = current_time - timedelta(hours=1)
+    # Delete each object created more than an hour ago
+    if "Contents" in objects:
+            for obj in objects["Contents"]:
+                creation_date = obj["LastModified"]
+                if creation_date < hour_ago:
+                    s3.delete_object(Bucket="foringestion", Key=obj["Key"])
 
 @router.get("/test", status_code=201, description="test connect")
 def test():

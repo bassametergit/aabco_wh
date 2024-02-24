@@ -262,7 +262,11 @@ def ingest_urls_and_text_to_pinecone(urls:List[str],chunkSize, chunkOverlap, ind
             raw_documents=html_to_rawdocs(filename)
         elif extension=='.txt'or filename[-3:].lower()=="txt":
             raw_documents=txt_to_rawdocs(filename)
-        elif extension=='.mp3'or filename[-3:].lower()=="mp3":
+        elif extension=='.mp3'or filename[-3:].lower()=="mp3" or extension=='.opus' or filename[-4:].lower()=="opus" or extension=='.wav' or filename[-3:].lower()=="wav" \
+            or extension=='.wma' or filename[-3:].lower()=="wma" or extension=='.3ga' or filename[-3:].lower()=="3ga" or extension=='.mov' or filename[-3:].lower()=="mov" \
+                or extension=='.aac' or filename[-3:].lower()=="aac " or extension=='.3ga' or filename[-3:].lower()=="3ga" or extension=='.amr' or filename[-3:].lower()=="amr" \
+                    or extension=='.m4a' or filename[-3:].lower()=="m4a" or extension=='.webm' or filename[-4:].lower()=="webm" or extension=='.mov' or filename[-3:].lower()=="mov" \
+                        or extension=='.mp4' or filename[-3:].lower()=="mp4" or extension=='.m4v' or filename[-3:].lower()=="m4v":
             raw_documents=audio_to_rawdocs(filename)
         elif is_youtube_video(filename):
             raw_documents=youtube_to_rawdocs(filename)
@@ -281,7 +285,10 @@ def ingest_urls_and_text_to_pinecone(urls:List[str],chunkSize, chunkOverlap, ind
             environment=pineconeenv,  
             namespace=nsname)
     if (delete_ns_if_exists):
+     try:
         pinecone.Index(index_name=ind_name).delete(delete_all=True, namespace=nsname)
+     except:
+        pass
     return Pinecone.from_documents(documents, embeddings, index_name=ind_name, namespace=nsname)
 
 def add_doc_to_pinecone(filename:str, chunkSize, chunkOverlap, ind_name, nsname, openaikey, pineconekey,pineconeenv):
@@ -754,14 +761,14 @@ This function does not have a return value. It raises an HTTPException if a docu
         
 # RUNS ONLY IN DEBUG MODE
 
-# pinecone.init(
-#             api_key=os.environ.get('PINECONE_API_KEY'), 
-#             environment=os.environ.get('PINECONE_ENVIRONMENT'))
-# d=pinecone.Index(index_name="aabco").describe_index_stats()
+pinecone.init(
+            api_key=os.environ.get('PINECONE_API_KEY'), 
+            environment=os.environ.get('PINECONE_ENVIRONMENT'))
+d=pinecone.Index(index_name="aabco").describe_index_stats()
 # print(d)
-# # Delete each namespace
-# pinecone.init(
-#             api_key='8f498f5d-5985-4aee-a54f-084262cb617d', 
-#             environment='gcp-starter')
-# for n in d['namespaces'].keys():
-#     pinecone.Index(index_name="aabco").delete(delete_all=True, namespace=n)
+# Delete each namespace
+pinecone.init(
+            api_key='8f498f5d-5985-4aee-a54f-084262cb617d', 
+            environment='gcp-starter')
+for n in d['namespaces'].keys():
+    pinecone.Index(index_name="aabco").delete(delete_all=True, namespace=n)
