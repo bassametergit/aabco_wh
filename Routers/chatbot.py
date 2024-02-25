@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter, Depends,  HTTPException
 from fastapi.responses import JSONResponse
 from apis_models import  SessionForUserSessions, DataFoldersForGetNamespaces,  UserForApi, DataFolderForApi, UpdateDocsOfDataFolderForApi
-from chains_functions import answer_one_session_question
+from chains_functions import answer_one_session_question, answer_one_session_question_streaming
 from ingest import ingest_urls_and_text_to_pinecone, normalize_string, verify_filenames_before_ingestion, add_string_to_pinecone
 from db_models import NamespaceDb, SessionDb, UserDb
 from data_access import Data_Access
@@ -405,6 +405,50 @@ def question(sessionId:str, q: str, _user=Depends(authorize_user)):
     thread.start()
     return {"answer":answer}
 
+@router.post("/question_streaming", status_code=201, description="Ask a question for Chatbot Jenny")
+async def question_streaming(websocket: WebSocket):
+    """
+    Ask a question to chatbot Jenny and retrieve an answer with streamig in a socket.
+   
+    Parameters:
+        sessionId (str): The User Session.
+        q (str): The question text.
+    Returns:
+        str: The answer.
+
+    Raises:
+        HTTPException:
+            - 404 Not Found: If the provided session ID is invalid or inexistent.
+    """
+    await websocket.accept()
+    # Receive and send back the client message
+    question = await websocket.receive_text()
+    client_message = json.loads(question)
+    if not Data_Access.IsValidObjectId(client_message["sessionId"]):
+        raise HTTPException(status_code=404, detail="Invalid Session Id.")
+    session=Data_Access.GetSession(client_message["sessionId"])
+    if session==None:
+        raise HTTPException(status_code=404, detail="Inexistent Session.")
+    ns=Data_Access.GetNamespace(session['namespaceid'])
+    if ns==None:
+        m="Inexistent Namespace of Id "+session['namespaceid']+". Maybe deleted after creation of this session creation." 
+        raise HTTPException(status_code=404, detail=m)
+    chath = [tuple(l) for l in session['chathistory']]
+    openai_key, pinecone_key, pinecone_env=get_openai_and_pinecone_keys()
+    answer, updated_chat_history=await answer_one_session_question_streaming(query=client_message["question"],pineconekey=pinecone_key,openaik=openai_key,
+                                                             indexname=ns['indexname'],pineconeenv=pinecone_env,
+                                                             pineconenamespace=ns['pineconeName'],
+                                                             model="gpt-4-0314",questionAnsweringTemperature=0.9,maxTokens=3000,similarSourceDocuments=3,
+                                                             chat_history=chath,websocket= websocket)
+    Data_Access.UpdateChatHistory(sessionid=client_message["sessionId"], history=updated_chat_history)
+    
+    # add question and answer to Pinecone namespace
+    text_to_ingest = "user question ("+str(datetime.now())+"): " + client_message["question"] +"\n" + "your answer (GPT): " + answer
+    thread = threading.Thread(target=add_string_to_pinecone, args=(text_to_ingest,300, 30, ns['indexname'],
+                                            ns['pineconeName'], openai_key,
+                                            pinecone_key,pinecone_env))
+    thread.start()
+    return {"answer":answer}
 
 router.delete("/delete_foringestion", status_code=201, description="Deletes all files in foringestion bucket at S3")
 # Deletes all files of bucket "foringestion" on S3 (used to ingest user local files)

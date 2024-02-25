@@ -1,6 +1,8 @@
 
 
 from langchain.callbacks.base import BaseCallbackManager 
+from callback import StreamingLLMCallbackHandler
+
 
 from langchain.chains.llm import LLMChain
 from langchain.chat_models import ChatOpenAI
@@ -34,6 +36,8 @@ openai_apik (str): The OpenAI API key for authentication.
 Return Value
 Returns a language model chain (LLMChain) object configured with the specified parameters for generating responses to user prompts.
  """
+ 
+ 
  try:
     stream_manager = BaseCallbackManager ([])
     llm = ChatOpenAI(
@@ -59,7 +63,7 @@ Returns a language model chain (LLMChain) object configured with the specified p
      print("ERROR in make_simple_LLMCHAIN")
 
 
-def answer_one_question(vectstore: VectorStore,input,
+async def answer_one_question(vectstore: VectorStore,input,
                               model,
                               questionAnsweringTemperature, 
                               similarSourceDocuments, maxTokens, 
@@ -269,6 +273,7 @@ def loop_chat_pinecone(indexname:str, namespace:str, openaik:str,
 def answer_one_session_question(query, pineconekey,openaik,indexname,pineconeenv,pineconenamespace,model,questionAnsweringTemperature,maxTokens,
                                 similarSourceDocuments, chat_history):
     stream_manager = BaseCallbackManager ([])
+    
     vectstore:VectorStore
     vectstore=pinecone_namespace_to_vectorestore(pinecone_apik=pineconekey,open_apik=openaik,index_name=indexname,pinecone_env=pineconeenv, ns=pineconenamespace)
     if vectstore==None:
@@ -287,9 +292,37 @@ def answer_one_session_question(query, pineconekey,openaik,indexname,pineconeenv
         return_source_documents=False, 
         verbose=False
     )
+  
     result = qa_chain({"question": query, "chat_history": chat_history})
     chat_history.append((query, result["answer"]))
     return result["answer"],chat_history
+
+
+async def answer_one_session_question_streaming(query, pineconekey,openaik,indexname,pineconeenv,pineconenamespace,model,questionAnsweringTemperature,maxTokens,
+                                similarSourceDocuments, chat_history, websocket):
+    stream_handler = StreamingLLMCallbackHandler(websocket)
+    stream_manager = BaseCallbackManager([stream_handler])
+    vectstore:VectorStore
+    vectstore=pinecone_namespace_to_vectorestore(pinecone_apik=pineconekey,open_apik=openaik,index_name=indexname,pinecone_env=pineconeenv, ns=pineconenamespace)
+    if vectstore==None:
+      print("Inexistent Pinecone index name or namespace")
+      return None
+    qa_chain = ConversationalRetrievalChain.from_llm(
+      ChatOpenAI(model=model,
+        temperature=questionAnsweringTemperature,
+        streaming=True,
+        callback_manager=stream_manager,
+        verbose=False,
+        openai_api_key=openaik,
+        max_tokens=maxTokens
+      ),
+        vectstore.as_retriever(search_kwargs={'k': similarSourceDocuments}),
+        return_source_documents=False, 
+        verbose=False
+    )
+    result=await qa_chain.arun(input=query,chat_history=chat_history )
+    chat_history.append((query, result))
+    return result,chat_history
 
 #TESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
 
