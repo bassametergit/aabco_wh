@@ -405,7 +405,7 @@ def question(sessionId:str, q: str, _user=Depends(authorize_user)):
     thread.start()
     return {"answer":answer}
 
-@router.post("/question_streaming", status_code=201, description="Ask a question for Chatbot Jenny")
+@router.websocket("/question_streaming", status_code=201, description="Ask a question for Chatbot Jenny")
 async def question_streaming(websocket: WebSocket):
     """
     Ask a question to chatbot Jenny and retrieve an answer with streamig in a socket.
