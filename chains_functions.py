@@ -312,15 +312,18 @@ async def answer_one_session_question_streaming(query, pineconekey,openaik,index
         temperature=questionAnsweringTemperature,
         streaming=True,
         callback_manager=stream_manager,
-        verbose=False,
+        verbose=False,  
         openai_api_key=openaik,
         max_tokens=maxTokens,
+        return_source_documents=False,
+        return_generated_question=False,
+        return_only_outputs =True
       ),
         vectstore.as_retriever(search_kwargs={'k': similarSourceDocuments}),
         return_source_documents=False, 
         verbose=False
     )
-    result=await qa_chain.arun(question=query,chat_history=chat_history, return_only_outputs =True,return_generated_question=False )
+    result=await qa_chain.arun(question=query,chat_history=chat_history )
     chat_history.append((query, result))
     return result,chat_history
 
