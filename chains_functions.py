@@ -320,7 +320,7 @@ async def answer_one_session_question_streaming(query, pineconekey,openaik,index
         return_source_documents=False, 
         verbose=False
     )
-    result=await qa_chain.arun(question=query,chat_history=chat_history, return_only_outputs =True )
+    result=await qa_chain.arun(question=query,chat_history=chat_history, return_only_outputs =True,return_generated_question=False )
     chat_history.append((query, result))
     return result,chat_history
 
