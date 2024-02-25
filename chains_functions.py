@@ -317,7 +317,6 @@ async def answer_one_session_question_streaming(query, pineconekey,openaik,index
         max_tokens=maxTokens,
       ),
         vectstore.as_retriever(search_kwargs={'k': similarSourceDocuments}),
-        return_source_documents=False, 
         verbose=False,
         return_source_documents=False,
         return_generated_question=False,
