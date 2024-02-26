@@ -308,7 +308,8 @@ async def answer_one_session_question_streaming(query, pineconekey,openaik,index
       return None
     general_system_template = r""" 
       Please Use provided context to give a short answer to the question.
-      if provided context contains any relative time or date (like yesterday), try to search provided context for information that allow you to infer and transform it into an absolute time or date.
+      if provided context contains any time or date (like yesterday) relative to the conversation's time and date, 
+      try to search provided context for information (especially the conversation's date)  that allow you to infer and transform the relative time or date into an absolute time or date.
       Always answer in the question's language. If the questions changes language, change also answer's language.
       ----
     {context}
