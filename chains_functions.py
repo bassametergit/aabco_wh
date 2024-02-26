@@ -17,6 +17,8 @@ from langchain.prompts.chat import (
 from langchain.chains import ConversationalRetrievalChain
 import pickle
 from pathlib import Path
+from websockets.exceptions import WebSocketDisconnect
+
 
 from ingest import verify_filename_before_ingestion, ingest_doc_to_local_vectstore,  pinecone_namespace_to_vectorestore
 
@@ -337,7 +339,10 @@ async def answer_one_session_question_streaming(query, pineconekey,openaik,index
         rephrase_question=False,
         combine_docs_chain_kwargs={'prompt': qa_prompt}
     )
-    result=await qa_chain.arun(question=query,chat_history=chat_history,return_only_outputs=True )
+    try:
+      result=await qa_chain.arun(question=query,chat_history=chat_history,return_only_outputs=True )
+    except WebSocketDisconnect:
+        await websocket.close()
     chat_history.append((query, result))
     return result,chat_history
 
