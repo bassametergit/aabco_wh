@@ -309,8 +309,7 @@ async def answer_one_session_question_streaming(query, pineconekey,openaik,index
       return None
     general_system_template = r""" 
       Please Use provided context to give a short answer to the question.
-      If you cannot find the answer in the provided context, don't search anyehere else, just answer: I have no answer.
-      You can use other sources of information to do the following: if your answer contains any relative time or date (like yesterday), try to search provided context for information that allow you to infer and transform it into an absolute time or date.
+      if your answer contains any relative time or date (like yesterday), try to search provided context for information that allow you to infer and transform it into an absolute time or date.
       Always answer in the question's language. If the questions changes language, change also answer's language.
       ----
     {context}
