@@ -307,6 +307,18 @@ async def answer_one_session_question_streaming(query, pineconekey,openaik,index
     if vectstore==None:
       print("Inexistent Pinecone index name or namespace")
       return None
+    general_system_template = r""" 
+      Given a specific context, please give a short answer to the question.
+      If you cannot find the answer in the provided context, don't search anyehere else, just answer: I have no answer.
+      If the answer contains any relative time or date (like yesterday), try to search for information that allow you to provide absolute time or date (like on wednesday, February 26, 2024).
+      Always answer in the question's language. If the questions changes language, change also answer's language.
+      """
+    general_user_template = "Question:```{question}```"
+    messages = [
+            SystemMessagePromptTemplate.from_template(general_system_template),
+            HumanMessagePromptTemplate.from_template(general_user_template)
+    ]
+    qa_prompt = ChatPromptTemplate.from_messages( messages )
     qa_chain = ConversationalRetrievalChain.from_llm(
       ChatOpenAI(model=model,
         temperature=questionAnsweringTemperature,
@@ -320,7 +332,8 @@ async def answer_one_session_question_streaming(query, pineconekey,openaik,index
         verbose=False,
         return_source_documents=False,
         return_generated_question=False,
-        rephrase_question=False
+        rephrase_question=False,
+        combine_docs_chain_kwargs={'prompt': qa_prompt}
     )
     result=await qa_chain.arun(question=query,chat_history=chat_history,return_only_outputs=True )
     chat_history.append((query, result))
