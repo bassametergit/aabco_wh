@@ -7,12 +7,14 @@ from typing import Any
 
 class UserForApi(BaseModel):
     userName: str = Field("User", description="User Name")
+    password: str = Field(..., description="User Password")
     userFrontendId:str= Field(..., description="User Frontend Id")
     email:str= Field(..., description="User Email")
     role:str= Field(..., description="User Role. One of (superadmin, admin, creator, user)")
     def serialize_input(self):
         return {
             'userName': self.userName,
+            'password': self.password,
             'userFrontendId': self.userFrontendId,
             'email': self.email,
             'role': self.role

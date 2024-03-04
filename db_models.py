@@ -4,14 +4,16 @@ from pydantic import BaseModel, Field
 
 class UserDb(BaseModel):
     userfrontendid:str
+    password:str # hashed
     creationDate: Optional[datetime]
     email:str
     role:str # (superadmin, admin, client)
     name: Optional[str] 
 
-    def __init__(self, userfrontendid:str, email:str, role:str, name: str,creationdate:datetime=datetime.now()):
+    def __init__(self, userfrontendid:str, password:str, email:str, role:str, name: str,creationdate:datetime=datetime.now()):
         super().__init__(
             userfrontendid=userfrontendid,
+            password=password,
             creationDate=creationdate or datetime.now(),
             email=email,
             role=role, #(superadmin, admin, user)
@@ -45,12 +47,14 @@ class NamespaceDb(BaseModel):
     nsname: str = Field(..., description="The name of the namespace")
     nsdescription:str=Field(default="", description="The description of the namespace")
     pineconeName:str=Field(..., description="The Pinecone name of the namespace")
-    def __init__(self, indexname: str, nsname: str,  nsdescription: str,pineconeName:str, creationDate: datetime = None):
+    userfrontendid:str=Field(..., description="User having created the Namespace")
+    def __init__(self, indexname: str, nsname: str,  nsdescription: str,pineconeName:str, userfrontendid:str, creationDate: datetime = None):
         super().__init__(
             nsdescription=nsdescription,
             indexname=indexname,
             nsname=nsname,
             pineconeName=pineconeName,
+            userfrontendid=userfrontendid,
             creationDate=creationDate or datetime.now(),
         )
 

@@ -662,7 +662,8 @@ The function returns a list of raw documents, where each document represents a s
 
 def audio_to_rawdocs(audioUrl, metadata=None):
     aai.settings.api_key ="0a1986a0bda24904bbcb538d2c5f60b5"
-    transcriber = aai.Transcriber()
+    config = aai.TranscriptionConfig(language_detection=True)
+    transcriber = aai.Transcriber(config=config)
     transcript = transcriber.transcribe(audioUrl)
     raw_documents=string_to_rawdocs(transcript.text,None)
     # loader = AssemblyAIAudioTranscriptLoader(audioUrl,api_key="0a1986a0bda24904bbcb538d2c5f60b5")

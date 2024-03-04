@@ -35,6 +35,11 @@ class Data_Access:
         client_collection = get_collection(db_name, 'user')
         return client_collection.find_one({'_id': ObjectId(userId)})
      
+    @staticmethod
+    def GetUserIdByUserFrontendId(userFrontendId: str) -> str:
+        client_collection = get_collection(db_name, 'user')
+        u= client_collection.find_one({'userfrontendid': userFrontendId})
+        return str(u['_id'])
     
     @staticmethod
     def GetUserByFrontendId(userfrontendid: str) -> UserDb:
@@ -117,6 +122,12 @@ class Data_Access:
         allns=ns_collection.find(query)
         return allns
     
+    @staticmethod
+    def get_user_index_namespaces(indname, userfrontendid):
+        ns_collection = get_collection(db_name, 'namespace')
+        query = {"userfrontendid": userfrontendid, "indexname": indname}
+        allns=ns_collection.find(query)
+        return allns
 
     # Function to retrieve sessions based on userfrontendid
     def get_user_sessions(userfrontendid: str) -> List[SessionDb]:

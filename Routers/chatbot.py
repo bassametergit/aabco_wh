@@ -10,7 +10,7 @@ from fastapi import WebSocket, WebSocketDisconnect
 
 from typing import List
 from dependencies import authorize_user
-from internal.security_service import create_access_token, get_openai_and_pinecone_keys
+from internal.security_service import create_access_token, get_openai_and_pinecone_keys, get_password_hash, verify_password
 import re
 import threading
 import boto3
@@ -52,7 +52,7 @@ def create_user(user: UserForApi, _user=Depends(authorize_user)):
         if match==None:
             m="Bad Request: Invalid email \'"+user.email+"\'"
             raise HTTPException(status_code=400, detail=m)
-        newId=Data_Access.CreateUserDb(UserDb(userfrontendid=user.userFrontendId,  name=user.userName, email=user.email, role=user.role.lower()))
+        newId=Data_Access.CreateUserDb(UserDb(userfrontendid=user.userFrontendId, password=get_password_hash(user.password),  name=user.userName, email=user.email, role=user.role.lower()))
     else:
         if (u['email']!=user.email.lower()):
             raise HTTPException(status_code=400, detail="Bad Request: User Exists but userFrontendId and email don't match")
@@ -64,6 +64,23 @@ def create_user(user: UserForApi, _user=Depends(authorize_user)):
             "user_id": newId,
             "user_jwt":access_token
     })
+    
+@router.get("/login_user", status_code=201,description="Login User to get JWT")
+def login_user(userFrontendId: str, password:str):
+    """
+    return:
+    {
+        "user_jwt":str
+    }
+    """
+    u=Data_Access.GetUserByFrontendId(userfrontendid=userFrontendId)
+    if (u==None):
+            raise HTTPException(status_code=404, detail="Not Found: User Not Found")
+    if not verify_password(password, u['password']):
+        raise HTTPException(status_code=404, detail="Not Found: Bad Combinaison User/Password")
+    access_token = create_access_token(data={"username": u['name'], "email":u['email'], "userfrontendid":userFrontendId,
+                                             "backendid":Data_Access.GetUserIdByUserFrontendId(userFrontendId), "role":u['role']})
+    return access_token
     
 @router.put("/update_user_role", status_code=201, description="Update User Role to one of (superadmin, admin, user)")
 def update_user_role(userFrontendId:str, newRole:str, _user=Depends(authorize_user)):
@@ -206,7 +223,9 @@ Response:
         verify_filenames_before_ingestion(docs=ns.docs) #will generate exception if any filename or url isn't valid or is unsupported format to ingest
     newId=Data_Access.CreateNamespaceDb(NamespaceDb(indexname=ns.indexName,
                                         nsname=ns.nsName, 
-                                        nsdescription=ns.description, pineconeName=ns.nsName+"_"+_user['userfrontendid'], creationDate=datetime.now())) 
+                                        nsdescription=ns.description, pineconeName=ns.nsName+"_"+_user['userfrontendid'], 
+                                        userfrontendid=_user['userfrontendid'],
+                                        creationDate=datetime.now())) 
     openai_key, pinecone_key, pinecone_env=get_openai_and_pinecone_keys()
     ingest_urls_and_text_to_pinecone(urls=ns.docs, chunkSize=300, chunkOverlap=30, ind_name=ns.indexName,
                                             nsname=ns.nsName+"_"+_user['userfrontendid'], delete_ns_if_exists=True, openaikey=openai_key,
@@ -294,6 +313,33 @@ def index_namespaces(indexName:str, _user=Depends(authorize_user)) -> List[DataF
     if (_user['role']=="user") :
         raise HTTPException(status_code=403, detail="Forbidden. User cannot Get List of Data Folders")
     namespaces= Data_Access.get_index_namespaces(indname=indexName)
+    nsss:List[DataFoldersForGetNamespaces]=[]
+    for ns in namespaces:
+        nsss.append(DataFoldersForGetNamespaces(id=str(ns['_id']),name=ns['nsname'],creationDate=ns['creationDate'],description=ns['nsdescription']))
+    return nsss
+
+@router.get("/user_index_namespaces", status_code=200, description="Get the list of all user's existing namespaces in a given index")
+def user_index_namespaces(indexName:str, _user=Depends(authorize_user)) -> List[DataFoldersForGetNamespaces]:
+    """
+    Get the list of data folders in an index belonging to a user (userFrontendId in jwt).
+
+    Parameters:
+        indexName (str): Index Name in Pinecone.
+
+    Returns:
+        List[DataFoldersForGetNamespaces]: A list of data folders .
+
+    Model Classes:
+        - DataFoldersForGetNamespaces:
+            id:str
+            name: str 
+            creationDate: datetime 
+            description:str
+    """
+   
+    if (_user['role']=="user") :
+        raise HTTPException(status_code=403, detail="Forbidden. User cannot Get List of Data Folders")
+    namespaces= Data_Access.get_user_index_namespaces(indname=indexName, userfrontendid=_user['userfrontendid'])
     nsss:List[DataFoldersForGetNamespaces]=[]
     for ns in namespaces:
         nsss.append(DataFoldersForGetNamespaces(id=str(ns['_id']),name=ns['nsname'],creationDate=ns['creationDate'],description=ns['nsdescription']))
