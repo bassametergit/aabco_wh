@@ -31,6 +31,12 @@ class Data_Access:
         return result.modified_count
             
     @staticmethod
+    def UpdateUserPassword(userFrontendId:str, newHashedPass:str)->int: # returns 1 if updated, 0 if User not found
+        collection = get_collection(db_name, 'user')
+        result = collection.update_one({'userfrontendid': userFrontendId}, {'$set': {'password': newHashedPass}})
+        return result.modified_count
+    
+    @staticmethod
     def GetUserById(userId: str) -> UserDb:
         client_collection = get_collection(db_name, 'user')
         return client_collection.find_one({'_id': ObjectId(userId)})

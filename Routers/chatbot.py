@@ -118,6 +118,35 @@ def update_user_role(userFrontendId:str, newRole:str, _user=Depends(authorize_us
     return JSONResponse(content={
         "updated": updated,"user_jwt":access_token
     })
+    
+@router.put("/change_own_password", status_code=201, description="Change Own Password")
+def change_own_password(userFrontendId:str,oldClearPass:str, newClearPass:str, _user=Depends(authorize_user)):
+    """
+    Change Own User Password.
+    This Api can be called only with a the same user's JWT
+    
+    Args:
+        userFrontendId (str): The Frontend user Id
+        oldClearPass (str): Old clear password
+        newClearPass (str): New clear password
+        _user (optional): user description after Bearer Jwt Auth. Defaults to Depends (authorize_user).
+
+    Raises:
+        HTTPException: status_code=403, detail="Forbidden. Only superadmin can update User Role
+        HTTPException: status_code=400, detail="Bad Request: role should be one of (superadmin, admin, user)
+
+    Returns:
+    {
+        "updated": int, #(number of updated documents in Db (1 or 0))
+    }
+    """
+    if (_user['userfrontendid']!=userFrontendId):
+         raise HTTPException(status_code=403, detail="Forbidden. User can change only his own password")
+    u=Data_Access.GetUserByFrontendId(userfrontendid=userFrontendId)
+    if not verify_password(oldClearPass, u['password']):
+         raise HTTPException(status_code=403, detail="Forbidden. Incorrect old password")
+    updated=Data_Access.UpdateUserPassword(userFrontendId=userFrontendId,newHashedPass=get_password_hash(newClearPass))
+    return updated
 
 @router.get("/get_user_details", status_code=201, description="Get User Details")
 def get_user_details(userFrontendId: str, _user=Depends(authorize_user)):
